@@ -11,7 +11,6 @@ export default {
   props: ["listing"],
   methods: {
     goToStockDetail() {
-      console.log("Go to stock: " + this.listing.Symbol);
       this.$router.push({
         name: "stock-detail",
         params: {
