@@ -38,6 +38,10 @@ Navigate a web browser to http://localhost:8080
 
 From the home screen you can search for any company name or stock symbol and see what their average stock price has been over the last month.
 
+## Roadmap
+
+Eventually I'd like to add in a flame chart.
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
