@@ -1,29 +1,47 @@
-# vuedough
+# D'oh!
 
-## Project setup
-```
-yarn install
+D'oh is a Vue app that lets even the simplest amongst us find information about their favorite publicly traded companies.
+
+## Installation
+
+Use git to clone D'oh!
+
+```bash
+git clone git@github.com:reedrosser/doh.git
 ```
 
-### Compiles and hot-reloads for development
+Then use your favorite package manager to install the dependencies
+
+```bash
+yarn i
+or
+npm i
 ```
+
+## Deployment
+
+To run this local version of D'oh you'll need to run an express server in one terminal to provide JSON data to the app.
+
+```bash
+yarn run stockServer
+```
+
+Then you start the D'oh app in another terminal.
+
+```bash
 yarn run serve
 ```
 
-### Compiles and minifies for production
-```
-yarn run build
-```
+Navigate a web browser to http://localhost:8080
 
-### Run your tests
-```
-yarn run test
-```
+## Usage
 
-### Lints and fixes files
-```
-yarn run lint
-```
+From the home screen you can search for any company name or stock symbol and see what their average stock price has been over the last month.
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
