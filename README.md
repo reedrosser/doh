@@ -18,6 +18,10 @@ or
 npm i
 ```
 
+## Configuration
+
+The Express server needs access to stock data csv files in order to provide them to D'oh. Update the config.js file with the paths to your stock data files in .csv format.
+
 ## Deployment
 
 To run this local version of D'oh you'll need to run an express server in one terminal to provide JSON data to the app.
@@ -41,6 +45,7 @@ From the home screen you can search for any company name or stock symbol and see
 ## Roadmap
 
 Eventually I'd like to add in a flame chart.
+Also error checking for routes.
 
 ## Contributing
 
