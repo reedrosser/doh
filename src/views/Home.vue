@@ -24,13 +24,10 @@ export default {
   },
   methods: {
     getStocks(stockName) {
-      console.log("app: " + stockName);
       if (stockName.length > 2) {
-        console.log("long enough!");
         axios
           .get(`/stocks?stockName=${stockName}`)
           .then(res => {
-            console.log(this.listings.length);
             this.listings = res.data;
             this.emptyListings = this.listings.length < 1 ? true : false;
           })
