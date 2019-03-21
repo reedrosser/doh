@@ -18,10 +18,14 @@ export default {
 <style scoped>
 .header {
   background-color: #00a56b;
+  padding: 20px;
 }
 .header-title {
   font-size: 55px;
   font-weight: 600;
+  color: white;
+}
+a {
   color: white;
 }
 </style>

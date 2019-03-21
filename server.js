@@ -3,7 +3,7 @@ const app = express();
 
 let stockJSON = { testKey: "testValue" };
 
-app.get("/", (req, res) => res.send("Hello World!"));
+app.get("/", (req, res) => res.send(":)"));
 
 app.get("/stocks", (req, res) => {
   if (req.query.stockName === undefined || req.query.stockName.length < 3) {
@@ -13,7 +13,8 @@ app.get("/stocks", (req, res) => {
   let returnArray = stockJSON.filter(stock => {
     return stockMatch(
       req.query.stockName.toLowerCase(),
-      stock.Name.toLowerCase()
+      stock.Name.toLowerCase(),
+      stock.Symbol.toLowerCase()
     );
   });
   console.log("returnArray:");
@@ -34,9 +35,12 @@ function getInfo() {
     });
 }
 
-function stockMatch(queryString, thisStockName) {
+function stockMatch(queryString, thisStockName, thisStockSymbol) {
   const matchExp = new RegExp(queryString, "g");
-  if (thisStockName.match(matchExp) !== null) {
+  if (
+    thisStockName.match(matchExp) !== null ||
+    thisStockSymbol.match(matchExp)
+  ) {
     return true;
   } else {
     return false;

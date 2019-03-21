@@ -30,4 +30,15 @@ body {
   text-align: center;
   color: #2c3e50;
 }
+
+.btn {
+  background-color: #00a56b;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.btn:hover {
+  cursor: pointer;
+}
 </style>

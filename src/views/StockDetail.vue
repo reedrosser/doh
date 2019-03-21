@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <p>{{stockSymbol}}</p>
-    <button @click="goBack">Back</button>
+  <div class="container">
+    <h2>{{stockSymbol}}</h2>
+    <div class="btn" @click="goBack">Back</div>
     <highcharts :options="chartOptions"/>
   </div>
 </template>
@@ -82,5 +82,13 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  position: relative;
+}
+.btn {
+  position: absolute;
+  top: -10px;
+  left: 5px;
+}
 </style>
 

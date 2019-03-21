@@ -10,10 +10,12 @@
       autocomplete="off"
     >
     <!-- <input type="submit" value="search"> -->
+    <div class="btn" v-on:click="searchStock">SUBMIT</div>
     <p
       :class="[this.badSearch ? 'badSearch' : 'goodSearch']"
     >Search must be longer than 3 characters</p>
     <p v-if="emptyListings">Sorry, there were no results for that name</p>
+    <p v-if="lastSearch">Search results for: {{lastSearch}}</p>
   </form>
 </template>
 
@@ -24,7 +26,8 @@ export default {
   data() {
     return {
       searchTerm: "",
-      badSearch: false
+      badSearch: false,
+      lastSearch: ""
     };
   },
   methods: {
@@ -38,6 +41,7 @@ export default {
         console.log("search vue: " + this.searchTerm);
         this.$emit("search-stock", this.searchTerm);
         if (clear) {
+          this.lastSearch = this.searchTerm;
           this.searchTerm = "";
         }
         this.badSearch = false;
@@ -45,9 +49,8 @@ export default {
         this.badSearch = true;
       }
     },
-
     onChange() {
-      console.log("tada: " + this.searchTerm);
+      this.lastSearch = "";
       if (this.searchTerm.length > 2) {
         this.searchStock();
       }
@@ -74,6 +77,15 @@ export default {
   border-radius: 5px;
   border: solid 2px #e1e6ef;
   height: 40px;
+}
+.btn {
+  display: inline-block;
+  margin-left: 10px;
+}
+@media only screen and (max-width: 468px) {
+  .btn {
+    margin-top: 10px;
+  }
 }
 </style>
 
