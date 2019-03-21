@@ -4,7 +4,7 @@
     <h2>Resources</h2>
     <a href="https://github.com/highcharts/highcharts-vue#requirements">HighCharts</a>
     <a href="https://iextrading.com/developer/">IEX Cloud</a>
-    <a href="https://github.com/highcharts/highcharts-vue#requirements">This Repo</a>
+    <a href="https://github.com/reedrosser/doh">D'oh! On GitHub</a>
   </div>
 </template>
 
