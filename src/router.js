@@ -21,9 +21,12 @@ export default new Router({
         import(/* webpackChunkName: "about" */ "./views/About.vue")
     },
     {
-      path: "/stock-detail/:stockSymbol",
+      path: "/stock-detail/:stockSymbol/:stockName",
       name: "stock-detail",
-      props: { default: true },
+      props: route => ({
+        stockSymbol: route.params.stockSymbol,
+        stockName: route.params.stockName
+      }),
       // route level code-splitting
       // this generates a separate chunk (stock-detail.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
