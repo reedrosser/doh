@@ -38,7 +38,6 @@ export default {
         clear = true;
       }
       if (this.searchTerm.length > 2) {
-        console.log("search vue: " + this.searchTerm);
         this.$emit("search-stock", this.searchTerm);
         if (clear) {
           this.lastSearch = this.searchTerm;
