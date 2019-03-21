@@ -16,11 +16,16 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .btn {
-  position: absolute;
-  top: -10px;
-  left: 5px;
+  background-color: #00a56b;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.btn:hover {
+  cursor: pointer;
 }
 </style>
 

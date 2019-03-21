@@ -1,10 +1,17 @@
 <template>
   <div class="container">
     <h2>{{stockSymbol}}</h2>
+    <h3>{{stockName}}</h3>
     <BackButton/>
     <!-- <highcharts v-if="showGraph" :options="chartOptions"/> -->
     <!-- <div v-else>I am Candelstick Chart</div> -->
-    <apexChart class="chart" width="80%" type="line" :options="chartOptions" :series="series"></apexChart>
+    <apexChart
+      class="chart"
+      width="100%"
+      type="candlestick"
+      :options="chartOptions"
+      :series="series"
+    ></apexChart>
     <button @click="switchCharts">Show {{this.showGraph? 'Candlestick Chart' : 'Line Chart'}}</button>
     <BasicButton :callback="doLogs">Content Here</BasicButton>
   </div>
@@ -37,6 +44,14 @@ export default {
         },
         xaxis: {
           type: "datetime"
+        },
+        plotOptions: {
+          candlestick: {
+            colors: {
+              upward: "#00a56b",
+              downward: "#c81d25"
+            }
+          }
         }
       },
       series: [
@@ -84,11 +99,9 @@ export default {
       this.showGraph = !this.showGraph;
       console.log("showGraph: " + this.showGraph);
     },
-    setDataPoints(data) {
-      let dataPoints = [];
-      let dataDates = [];
+    setDataPoints(data, graph = false) {
       data.map(point => {
-        let tempArray = [point.high, point.low, point.open, point.close];
+        let tempArray = [point.open, point.high, point.low, point.close];
         tempArray = tempArray.filter(val => {
           return val !== undefined;
         });
@@ -97,20 +110,14 @@ export default {
         let denom = tempArray.length > 0 ? tempArray.length : 1;
         let avg = sum / denom;
         console.log(`average: ${avg}`);
-        // dataPoints.push(sum / denom);
-        // dataDates.push(moment(point.date).format("MMM-DD"));
-        let tempObj = { x: point.date, y: avg };
+        let tempObj = { x: point.date, y: graph ? avg : tempArray };
         console.log(tempObj);
         this.series[0].data.push(tempObj);
       });
-      //   this.series[0].data = dataPoints;
-      //   this.chartOptions.xaxis.categories = dataDates;
-      //   console.log(this.series[0]);
     }
   },
   created() {
     this.series[0].name = `${this.stockSymbol}`;
-    // this.chartOptions.title.text = `${this.stockName}`;
     getHistory(this.stockSymbol, this.setDataPoints);
   }
 };
@@ -119,11 +126,6 @@ export default {
 <style scoped>
 .container {
   position: relative;
-}
-.btn {
-  position: absolute;
-  top: -10px;
-  left: 5px;
 }
 
 .chart {
