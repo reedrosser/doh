@@ -17,8 +17,6 @@ app.get("/stocks", (req, res) => {
       stock.Symbol.toLowerCase()
     );
   });
-  console.log("returnArray:");
-  console.log(returnArray);
   res.json(returnArray);
 });
 

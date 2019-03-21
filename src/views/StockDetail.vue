@@ -1,7 +1,8 @@
 <template>
   <div class="container">
     <h2>{{stockSymbol}}</h2>
-    <div class="btn" @click="goBack">Back</div>
+    <!-- <div class="btn" @click="goBack">Back</div> -->
+    <BackButton/>
     <highcharts :options="chartOptions"/>
   </div>
 </template>
@@ -10,12 +11,14 @@
 import { Chart } from "highcharts-vue";
 import { getHistory } from "../services/pricehistory";
 import moment from "moment";
+import BackButton from "../components/BackButton";
 
 export default {
   name: "StockDetail",
   props: ["stockSymbol", "stockName"],
   components: {
-    highcharts: Chart
+    highcharts: Chart,
+    BackButton
   },
 
   data() {
@@ -52,7 +55,6 @@ export default {
       this.$router.go(-1);
     },
     setDataPoints(data) {
-      console.log(`SET THE DATA!`);
       let dataPoints = [];
       let dataDates = [];
       data.map(point => {
@@ -61,8 +63,6 @@ export default {
             return val !== undefined;
           }
         );
-        console.log("tempArray");
-        console.log(tempArray);
         let sum = tempArray.reduce((a, b) => a + b, 0);
         let denom = tempArray.length > 0 ? tempArray.length : 1;
         dataPoints.push(sum / denom);
@@ -73,7 +73,6 @@ export default {
     }
   },
   created() {
-    console.log(`Stock detail created: ${this.stockSymbol}`);
     this.chartOptions.series[0].name = `${this.stockSymbol}`;
     this.chartOptions.title.text = `${this.stockName}`;
     getHistory(this.stockSymbol, this.setDataPoints);
