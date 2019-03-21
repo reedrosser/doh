@@ -14,11 +14,6 @@ export default {
 </script>
 
 <style scoped>
-.btn {
-  position: absolute;
-  top: -10px;
-  left: 5px;
-}
 </style>
 
 
