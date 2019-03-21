@@ -41,13 +41,13 @@ export default {
     }
   },
   created() {
-    axios
-      .get("/stocks")
-      .then(res => {
-        console.log("finished axios");
-        this.listings = res.data;
-      })
-      .catch(err => console.log(err));
+    // axios
+    //   .get("/stocks")
+    //   .then(res => {
+    //     console.log("finished axios");
+    //     this.listings = res.data;
+    //   })
+    //   .catch(err => console.log(err));
   }
 };
 </script>
