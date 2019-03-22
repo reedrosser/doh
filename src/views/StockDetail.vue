@@ -1,93 +1,140 @@
 <template>
   <div class="container">
     <h2>{{stockSymbol}}</h2>
-    <!-- <div class="btn" @click="goBack">Back</div> -->
+    <h3>{{stockName}}</h3>
     <BackButton/>
-    <highcharts :options="chartOptions"/>
+    <apexChart
+      class="chart"
+      width="100%"
+      :type="chartType"
+      :options="chartOptions"
+      :series="series"
+      ref="detailChart"
+    ></apexChart>
+    <BasicButton
+      :callback="switchCharts"
+      class="wideButton"
+    >Show {{this.chartType === 'line' ? 'Candlestick Chart' : 'Line Chart'}}</BasicButton>
   </div>
 </template>
 
 <script>
-import { Chart } from "highcharts-vue";
+import apexChart from "vue-apexcharts";
 import { getHistory } from "../services/pricehistory";
 import moment from "moment";
 import BackButton from "../components/BackButton";
+import BasicButton from "../components/BasicButton";
 
 export default {
   name: "StockDetail",
   props: ["stockSymbol", "stockName"],
   components: {
-    highcharts: Chart,
-    BackButton
+    BackButton,
+    apexChart,
+    BasicButton
   },
 
   data() {
     return {
+      showDefaultGraph: true,
+      chartType: "line",
+      usedBothCharts: false,
       chartOptions: {
         chart: {
-          type: "line"
+          id: "vuechart-example"
         },
-        title: {
-          text: ""
+        xaxis: {
+          type: "datetime"
         },
-        subtitle: {
-          text: "Last 30 Days"
-        },
-        xAxis: {
-          categories: []
-        },
-        yAxis: {
-          title: {
-            text: "Average Price in $USD"
+        plotOptions: {
+          candlestick: {
+            colors: {
+              upward: "#00a56b",
+              downward: "#c81d25"
+            }
           }
-        },
-        series: [
-          {
-            name: "",
-            data: []
-          }
-        ]
-      }
+        }
+      },
+      series: [
+        {
+          name: "series-1",
+          data: []
+        }
+      ],
+      secondaryData: []
     };
   },
   methods: {
     goBack() {
       this.$router.go(-1);
     },
+    switchCharts() {
+      if (this.chartType === "line") {
+        this.chartType = "candlestick";
+      } else {
+        this.chartType = "line";
+      }
+      let tempArray = [];
+      //   if both charts have been generated then swap the data
+      if (this.usedBothCharts) {
+        tempArray = this.series[0].data;
+        this.series[0].data = this.secondaryData;
+        this.secondaryData = tempArray;
+      } else {
+        this.usedBothCharts = true;
+        this.setDataPoints(this.secondaryData);
+      }
+    },
     setDataPoints(data) {
-      let dataPoints = [];
-      let dataDates = [];
+      // if we haven't used both charts yet, then put the raw data into the secondary Data
+      if (!this.usedBothCharts) {
+        this.secondaryData = data;
+      } else {
+        this.secondaryData = this.series[0].data;
+      }
+      this.series[0].data = [];
+
       data.map(point => {
-        let tempArray = [point.high, point.low, point.open, point.close].filter(
-          val => {
-            return val !== undefined;
-          }
-        );
-        let sum = tempArray.reduce((a, b) => a + b, 0);
-        let denom = tempArray.length > 0 ? tempArray.length : 1;
-        dataPoints.push(sum / denom);
-        dataDates.push(moment(point.date).format("MMM-DD"));
+        //   variables to calculate average
+        let sum, denom, avg;
+        // Temporary object to push to the series data array
+        let tempObj = { x: point.date };
+        //   [O, H, L, C]
+        let tempArray = [point.open, point.high, point.low, point.close];
+        // If any of the values are undefined, remove them from the array
+        tempArray = tempArray.filter(val => {
+          return val !== undefined;
+        });
+        if (this.chartType === "line") {
+          sum = tempArray.reduce((a, b) => a + b, 0) || 0;
+          denom = tempArray.length > 0 ? tempArray.length : 1;
+          avg = sum / denom;
+          tempObj.y = avg;
+        } else {
+          tempObj.y = tempArray;
+        }
+        this.series[0].data.push(tempObj);
       });
-      this.chartOptions.series[0].data = dataPoints;
-      this.chartOptions.xAxis.categories = dataDates;
     }
   },
   created() {
-    this.chartOptions.series[0].name = `${this.stockSymbol}`;
-    this.chartOptions.title.text = `${this.stockName}`;
+    this.series[0].name = `${this.stockSymbol}`;
     getHistory(this.stockSymbol, this.setDataPoints);
   }
 };
 </script>
 
 <style scoped>
+.wideButton {
+  width: 80%;
+  margin: 0 auto;
+}
 .container {
   position: relative;
 }
-.btn {
-  position: absolute;
-  top: -10px;
-  left: 5px;
+
+.chart {
+  max-width: 700px;
+  margin: 0 auto;
 }
 </style>
-
