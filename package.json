@@ -13,8 +13,6 @@
     "axios": "^0.18.0",
     "csvtojson": "^2.0.8",
     "express": "^4.16.4",
-    "highcharts": "^7.0.3",
-    "highcharts-vue": "^1.2.0",
     "moment": "^2.24.0",
     "nodemon": "^1.18.10",
     "vue": "^2.6.6",

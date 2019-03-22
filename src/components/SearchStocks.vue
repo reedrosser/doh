@@ -5,12 +5,11 @@
       class="searchBox"
       v-model="searchTerm"
       name="searchTerm"
-      placeholder="Search Stock..."
+      placeholder="Enter a Stock Name..."
       @input="onChange"
       autocomplete="off"
     >
-    <!-- <input type="submit" value="search"> -->
-    <div class="btn" v-on:click="searchStock">SUBMIT</div>
+    <BasicButton callback="searchStock">SUBMIT</BasicButton>
     <p
       :class="[this.badSearch ? 'badSearch' : 'goodSearch']"
     >Search must be longer than 3 characters</p>
@@ -20,9 +19,14 @@
 </template>
 
 <script>
+import BasicButton from "./BasicButton";
+
 export default {
   name: "SearchStocks",
   props: ["emptyListings"],
+  components: {
+    BasicButton
+  },
   data() {
     return {
       searchTerm: "",
@@ -61,6 +65,9 @@ export default {
 <style scoped>
 .searchForm {
   margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .badSearch {
   display: block;

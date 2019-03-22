@@ -3,22 +3,22 @@
     <h2>{{stockSymbol}}</h2>
     <h3>{{stockName}}</h3>
     <BackButton/>
-    <!-- <highcharts v-if="showGraph" :options="chartOptions"/> -->
-    <!-- <div v-else>I am Candelstick Chart</div> -->
     <apexChart
       class="chart"
       width="100%"
-      type="candlestick"
+      :type="chartType"
       :options="chartOptions"
       :series="series"
+      ref="detailChart"
     ></apexChart>
-    <button @click="switchCharts">Show {{this.showGraph? 'Candlestick Chart' : 'Line Chart'}}</button>
-    <BasicButton :callback="doLogs">Content Here</BasicButton>
+    <BasicButton
+      :callback="switchCharts"
+      class="wideButton"
+    >Show {{this.chartType === 'line' ? 'Candlestick Chart' : 'Line Chart'}}</BasicButton>
   </div>
 </template>
 
 <script>
-import { Chart } from "highcharts-vue";
 import apexChart from "vue-apexcharts";
 import { getHistory } from "../services/pricehistory";
 import moment from "moment";
@@ -29,7 +29,6 @@ export default {
   name: "StockDetail",
   props: ["stockSymbol", "stockName"],
   components: {
-    highcharts: Chart,
     BackButton,
     apexChart,
     BasicButton
@@ -37,7 +36,9 @@ export default {
 
   data() {
     return {
-      showGraph: true,
+      showDefaultGraph: true,
+      chartType: "line",
+      usedBothCharts: false,
       chartOptions: {
         chart: {
           id: "vuechart-example"
@@ -59,59 +60,59 @@ export default {
           name: "series-1",
           data: []
         }
-      ]
+      ],
+      secondaryData: []
     };
-    //   chartOptions: {
-    //     chart: {
-    //       type: "line"
-    //     },
-    //     title: {
-    //       text: ""
-    //     },
-    //     subtitle: {
-    //       text: "Last 30 Days"
-    //     },
-    //     xAxis: {
-    //       categories: []
-    //     },
-    //     yAxis: {
-    //       title: {
-    //         text: "Average Price in $USD"
-    //       }
-    //     },
-    //     series: [
-    //       {
-    //         name: "",
-    //         data: []
-    //       }
-    //     ]
-    //   }
-    // };
   },
   methods: {
     goBack() {
       this.$router.go(-1);
     },
-    doLogs() {
-      console.log("basic!");
-    },
     switchCharts() {
-      this.showGraph = !this.showGraph;
-      console.log("showGraph: " + this.showGraph);
+      if (this.chartType === "line") {
+        this.chartType = "candlestick";
+      } else {
+        this.chartType = "line";
+      }
+      let tempArray = [];
+      //   if both charts have been generated then swap the data
+      if (this.usedBothCharts) {
+        tempArray = this.series[0].data;
+        this.series[0].data = this.secondaryData;
+        this.secondaryData = tempArray;
+      } else {
+        this.usedBothCharts = true;
+        this.setDataPoints(this.secondaryData);
+      }
     },
-    setDataPoints(data, graph = false) {
+    setDataPoints(data) {
+      // if we haven't used both charts yet, then put the raw data into the secondary Data
+      if (!this.usedBothCharts) {
+        this.secondaryData = data;
+      } else {
+        this.secondaryData = this.series[0].data;
+      }
+      this.series[0].data = [];
+
       data.map(point => {
+        //   variables to calculate average
+        let sum, denom, avg;
+        // Temporary object to push to the series data array
+        let tempObj = { x: point.date };
+        //   [O, H, L, C]
         let tempArray = [point.open, point.high, point.low, point.close];
+        // If any of the values are undefined, remove them from the array
         tempArray = tempArray.filter(val => {
           return val !== undefined;
         });
-        let sum = tempArray.reduce((a, b) => a + b, 0) || 0;
-        console.log(`sum: ${sum}`);
-        let denom = tempArray.length > 0 ? tempArray.length : 1;
-        let avg = sum / denom;
-        console.log(`average: ${avg}`);
-        let tempObj = { x: point.date, y: graph ? avg : tempArray };
-        console.log(tempObj);
+        if (this.chartType === "line") {
+          sum = tempArray.reduce((a, b) => a + b, 0) || 0;
+          denom = tempArray.length > 0 ? tempArray.length : 1;
+          avg = sum / denom;
+          tempObj.y = avg;
+        } else {
+          tempObj.y = tempArray;
+        }
         this.series[0].data.push(tempObj);
       });
     }
@@ -124,13 +125,16 @@ export default {
 </script>
 
 <style scoped>
+.wideButton {
+  width: 80%;
+  margin: 0 auto;
+}
 .container {
   position: relative;
 }
 
 .chart {
+  max-width: 700px;
   margin: 0 auto;
-  /* border: solid 1px red; */
 }
 </style>
-
