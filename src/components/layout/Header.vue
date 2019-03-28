@@ -25,6 +25,7 @@ export default {
   font-weight: 600;
   color: white;
 }
+#nav,
 a {
   color: white;
 }

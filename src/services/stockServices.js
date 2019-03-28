@@ -7,17 +7,18 @@ stockServices.stockJSON = [];
 
 stockServices.init = function() {
   let csvFilePath;
+  let csvPromises = [];
   for (let i = 0; i < config.CSVFiles.length; i++) {
     csvFilePath = config.CSVFiles[i];
-    csv()
-      .fromFile(csvFilePath)
-      .then(jsonObj => {
-        this.stockJSON = this.stockJSON.concat(jsonObj);
-        if (i === config.CSVFiles.length - 1) {
-          this.stockJSON.sort(this.stockCompare);
-        }
-      });
+    csvPromises.push(csv().fromFile(csvFilePath));
   }
+  Promise.all(csvPromises)
+    .then(results => {
+      this.stockJSON = [].concat.apply([], results).sort(this.stockCompare);
+    })
+    .catch(err => {
+      console.log(err);
+    });
 };
 
 stockServices.stockMatch = function(
@@ -31,9 +32,8 @@ stockServices.stockMatch = function(
     thisStockSymbol.match(matchExp)
   ) {
     return true;
-  } else {
-    return false;
   }
+  return false;
 };
 
 stockServices.stockCompare = function(a, b) {
