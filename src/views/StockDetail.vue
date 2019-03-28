@@ -12,7 +12,7 @@
       ref="detailChart"
     ></apexChart>
     <BasicButton
-      :callback="switchCharts"
+      @callbacked="switchCharts"
       class="wideButton"
     >Show {{this.chartType === 'line' ? 'Candlestick Chart' : 'Line Chart'}}</BasicButton>
   </div>
@@ -22,8 +22,8 @@
 import apexChart from "vue-apexcharts";
 import { getHistory } from "../services/pricehistory";
 import moment from "moment";
-import BackButton from "../components/BackButton";
-import BasicButton from "../components/BasicButton";
+import BackButton from "../components/Button/BackButton";
+import BasicButton from "../components/Button/BasicButton";
 
 export default {
   name: "StockDetail",
@@ -41,7 +41,7 @@ export default {
       usedBothCharts: false,
       chartOptions: {
         chart: {
-          id: "vuechart-example"
+          id: "vuechart-stock"
         },
         xaxis: {
           type: "datetime"
@@ -65,21 +65,18 @@ export default {
     };
   },
   methods: {
-    goBack() {
-      this.$router.go(-1);
-    },
     switchCharts() {
       if (this.chartType === "line") {
         this.chartType = "candlestick";
       } else {
         this.chartType = "line";
       }
-      let tempArray = [];
       //   if both charts have been generated then swap the data
       if (this.usedBothCharts) {
-        tempArray = this.series[0].data;
-        this.series[0].data = this.secondaryData;
-        this.secondaryData = tempArray;
+        [this.series[0].data, this.secondaryData] = [
+          this.secondaryData,
+          this.series[0].data
+        ];
       } else {
         this.usedBothCharts = true;
         this.setDataPoints(this.secondaryData);
@@ -101,11 +98,12 @@ export default {
         let tempObj = { x: point.date };
         //   [O, H, L, C]
         let tempArray = [point.open, point.high, point.low, point.close];
-        // If any of the values are undefined, remove them from the array
-        tempArray = tempArray.filter(val => {
-          return val !== undefined;
-        });
+
         if (this.chartType === "line") {
+          // If any of the values are undefined, remove them from the array
+          tempArray = tempArray.filter(val => {
+            return val !== undefined;
+          });
           sum = tempArray.reduce((a, b) => a + b, 0) || 0;
           denom = tempArray.length > 0 ? tempArray.length : 1;
           avg = sum / denom;

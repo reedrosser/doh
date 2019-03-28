@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import BackButton from "../components/BackButton";
+import BackButton from "../components/Button/BackButton";
 export default {
   name: "About",
   components: {

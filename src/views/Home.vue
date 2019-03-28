@@ -7,8 +7,8 @@
 
 <script>
 import axios from "axios";
-import SearchStocks from "../components/SearchStocks.vue";
-import StockList from "../components/StockList.vue";
+import SearchStocks from "../components/Stocks/SearchStocks.vue";
+import StockList from "../components/Stocks/StockList.vue";
 
 export default {
   name: "Home",
@@ -39,6 +39,3 @@ export default {
   }
 };
 </script>
-
-<style>
-</style>

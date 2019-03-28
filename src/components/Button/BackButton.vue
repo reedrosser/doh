@@ -1,10 +1,9 @@
 <template>
-  <div class="btn" @click="goBack">Back</div>
-  <!-- <BasicButton callback="goBack">Back</BasicButton> -->
+  <BasicButton @callbacked="goBack">Back</BasicButton>
 </template>
 
 <script>
-import BasicButton from "../components/BasicButton";
+import BasicButton from "./BasicButton";
 export default {
   name: "BackButton",
   components: {

@@ -1,25 +1,27 @@
 <template>
-  <form class="searchForm" @submit="searchStock">
-    <input
-      type="text"
-      class="searchBox"
-      v-model="searchTerm"
-      name="searchTerm"
-      placeholder="Enter a Stock Name..."
-      @input="onChange"
-      autocomplete="off"
-    >
-    <BasicButton callback="searchStock">SUBMIT</BasicButton>
+  <div>
+    <form class="searchForm" @submit="searchStock">
+      <input
+        type="text"
+        class="searchBox"
+        v-model="searchTerm"
+        name="searchTerm"
+        placeholder="Enter a Stock Name..."
+        @input="onChange"
+        autocomplete="off"
+      >
+      <BasicButton callback="searchStock">SUBMIT</BasicButton>
+    </form>
     <p
       :class="[this.badSearch ? 'badSearch' : 'goodSearch']"
     >Search must be longer than 3 characters</p>
-    <p v-if="emptyListings">Sorry, there were no results for that name</p>
+    <p v-if="emptyListings  && !badSearch">Sorry, there were no results for that name</p>
     <p v-if="lastSearch">Search results for: {{lastSearch}}</p>
-  </form>
+  </div>
 </template>
 
 <script>
-import BasicButton from "./BasicButton";
+import BasicButton from "../Button/BasicButton";
 
 export default {
   name: "SearchStocks",
@@ -87,11 +89,6 @@ export default {
 .btn {
   display: inline-block;
   margin-left: 10px;
-}
-@media only screen and (max-width: 468px) {
-  .btn {
-    margin-top: 10px;
-  }
 }
 </style>
 

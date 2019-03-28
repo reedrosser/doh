@@ -1,5 +1,5 @@
 <template>
-  <div class="btn" @click="callback">
+  <div class="btn" @click="runCallback">
     <slot></slot>
   </div>
 </template>
@@ -7,10 +7,9 @@
 <script>
 export default {
   name: "BasicButton",
-  props: ["callback"],
   methods: {
-    goBack() {
-      this.$router.go(-1);
+    runCallback() {
+      this.$emit("callbacked");
     }
   }
 };
