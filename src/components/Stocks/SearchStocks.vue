@@ -15,8 +15,8 @@
     <p
       :class="[this.badSearch ? 'badSearch' : 'goodSearch']"
     >Search must be longer than 3 characters</p>
-    <p v-if="emptyListings  && !badSearch">Sorry, there were no results for that name</p>
-    <p v-if="lastSearch">Search results for: {{lastSearch}}</p>
+    <p v-if="emptyListings  && !badSearch">Sorry, there were no results for {{lastSearch}}</p>
+    <p v-if="!emptyListings && lastSearch">Search results for: {{lastSearch}}</p>
   </div>
 </template>
 
