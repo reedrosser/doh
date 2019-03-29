@@ -21,6 +21,7 @@
 <script>
 import apexChart from "vue-apexcharts";
 import { getHistory } from "../services/pricehistory";
+import moment from "moment";
 import BackButton from "../components/Button/BackButton";
 import BasicButton from "../components/Button/BasicButton";
 
@@ -70,6 +71,7 @@ export default {
       } else {
         this.chartType = "line";
       }
+      //   if both charts have been generated then swap the data
       if (this.usedBothCharts) {
         [this.series[0].data, this.secondaryData] = [
           this.secondaryData,
@@ -81,6 +83,7 @@ export default {
       }
     },
     setDataPoints(data) {
+      // if we haven't used both charts yet, then put the raw data into the secondary Data
       if (!this.usedBothCharts) {
         this.secondaryData = data;
       } else {
@@ -89,11 +92,15 @@ export default {
       this.series[0].data = [];
 
       data.map(point => {
+        //   variables to calculate average
         let sum, denom, avg;
+        // Temporary object to push to the series data array
         let tempObj = { x: point.date };
+        //   [O, H, L, C]
         let tempArray = [point.open, point.high, point.low, point.close];
 
         if (this.chartType === "line") {
+          // If any of the values are undefined, remove them from the array
           tempArray = tempArray.filter(val => {
             return val !== undefined;
           });

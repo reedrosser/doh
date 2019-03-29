@@ -25,7 +25,6 @@ app.get("/allstocks", (req, res) => {
 });
 
 const port = process.env.PORT || config.port || 3000;
-
 app.listen(port, () => console.log(`Listening on port ${port}!`));
 
 stockServices.init();
