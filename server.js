@@ -10,7 +10,7 @@ app.get("/stocks", (req, res) => {
     res.status(400).json([]);
     return;
   }
-  let returnArray = stockServices.stockJSON.filter(stock => {
+  let returnArray = stockServices.getStocks().filter(stock => {
     return stockServices.stockMatch(
       req.query.stockName.toLowerCase(),
       stock.Name.toLowerCase(),
@@ -21,7 +21,7 @@ app.get("/stocks", (req, res) => {
 });
 
 app.get("/allstocks", (req, res) => {
-  res.json(stockServices.stockJSON);
+  res.json(stockServices.getStocks());
 });
 
 const port = process.env.PORT || config.port || 3000;

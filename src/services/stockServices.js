@@ -1,24 +1,25 @@
 const csv = require("csvtojson");
 const config = require("../../config");
+const fs = require("fs");
+
+let csvDir = `${__dirname}/../assets/CSVs/`;
 
 const stockServices = {};
 
-stockServices.stockJSON = [];
+let stockJSON = [];
 
 stockServices.init = function() {
-  let csvFilePath;
-  let csvPromises = [];
-  for (let i = 0; i < config.CSVFiles.length; i++) {
-    csvFilePath = config.CSVFiles[i];
-    csvPromises.push(csv().fromFile(csvFilePath));
-  }
-  Promise.all(csvPromises)
-    .then(results => {
-      this.stockJSON = [].concat.apply([], results).sort(this.stockCompare);
-    })
-    .catch(err => {
+  fs.readdir(csvDir, (err, files) => {
+    if (err) {
       console.log(err);
-    });
+    } else {
+      processCSV(files);
+    }
+  });
+};
+
+stockServices.getStocks = () => {
+  return stockJSON;
 };
 
 stockServices.stockMatch = function(
@@ -47,6 +48,20 @@ stockServices.stockCompare = function(a, b) {
     comparison = -1;
   }
   return comparison;
+};
+
+processCSV = files => {
+  let csvPromises = [];
+  for (file of files) {
+    csvPromises.push(csv().fromFile(`${csvDir}${file}`));
+  }
+  Promise.all(csvPromises)
+    .then(results => {
+      stockJSON = [].concat.apply([], results).sort(this.stockCompare);
+    })
+    .catch(err => {
+      console.log(err);
+    });
 };
 
 module.exports = stockServices;
