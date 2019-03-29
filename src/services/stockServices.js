@@ -1,16 +1,24 @@
-const d3 = require("d3");
-const fs = require("fs");
+const csv = require("csvtojson");
+const config = require("../../config");
 
 const stockServices = {};
 
 stockServices.stockJSON = [];
 
-stockServices.init = () => {
-  let files = fs.readdirSync(`${__dirname}/../assets/CSVs`);
-  files.map(file => {
-    process(file);
-  });
-  stockServices.stockJSON = stockServices.stockJSON.sort(this.stockCompare);
+stockServices.init = function() {
+  let csvFilePath;
+  let csvPromises = [];
+  for (let i = 0; i < config.CSVFiles.length; i++) {
+    csvFilePath = config.CSVFiles[i];
+    csvPromises.push(csv().fromFile(csvFilePath));
+  }
+  Promise.all(csvPromises)
+    .then(results => {
+      this.stockJSON = [].concat.apply([], results).sort(this.stockCompare);
+    })
+    .catch(err => {
+      console.log(err);
+    });
 };
 
 stockServices.stockMatch = function(
@@ -39,11 +47,6 @@ stockServices.stockCompare = function(a, b) {
     comparison = -1;
   }
   return comparison;
-};
-
-const process = name => {
-  var raw = fs.readFileSync(`${__dirname}/../assets/CSVs/${name}`, "utf8");
-  stockServices.stockJSON = stockServices.stockJSON.concat(d3.csvParse(raw));
 };
 
 module.exports = stockServices;
