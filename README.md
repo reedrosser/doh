@@ -44,8 +44,10 @@ From the home screen you can search for any company name or stock symbol and see
 
 ## Roadmap
 
-Eventually I'd like to add in a flame chart.
-Also error checking for routes.
+Future updates could include getting the CSV data from an API call on initialization
+Replacing Apex-Charts with D3 and better customizing the experience
+More Error checking
+Updating the "search results" portion of the Search Bar
 
 ## Contributing
 

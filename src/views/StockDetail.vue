@@ -103,7 +103,7 @@ export default {
           denom = tempArray.length > 0 ? tempArray.length : 1;
           avg = sum / denom;
           tempObj.y = avg;
-          if (tempArray.length !== 1) {
+          if (typeof sum !== "number") {
             pushable = false;
           }
         } else {

@@ -1,19 +1,19 @@
 <template>
   <div id="app">
-    <search-stocks v-on:search-stock="getStocks" :emptyListings="emptyListings"/>
+    <SearchBar v-on:search-stock="getStocks" :emptyListings="emptyListings"/>
     <stock-list :listings="listings"/>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import SearchStocks from "../components/Stocks/SearchStocks.vue";
-import StockList from "../components/Stocks/StockList.vue";
+import SearchBar from "../components/Home/SearchBar.vue";
+import StockList from "../components/Home/StockList.vue";
 
 export default {
   name: "Home",
   components: {
-    SearchStocks,
+    SearchBar,
     StockList
   },
   data() {
