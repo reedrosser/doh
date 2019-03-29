@@ -89,22 +89,32 @@ export default {
       this.series[0].data = [];
 
       data.map(point => {
+        let pushable = true;
         let sum, denom, avg;
         let tempObj = { x: point.date };
         let tempArray = [point.open, point.high, point.low, point.close];
 
+        tempArray = tempArray.filter(val => {
+          return val !== undefined;
+        });
+
         if (this.chartType === "line") {
-          tempArray = tempArray.filter(val => {
-            return val !== undefined;
-          });
           sum = tempArray.reduce((a, b) => a + b, 0) || 0;
           denom = tempArray.length > 0 ? tempArray.length : 1;
           avg = sum / denom;
           tempObj.y = avg;
+          if (tempArray.length !== 1) {
+            pushable = false;
+          }
         } else {
           tempObj.y = tempArray;
+          if (tempArray.length < 4) {
+            pushable = false;
+          }
         }
-        this.series[0].data.push(tempObj);
+        if (pushable) {
+          this.series[0].data.push(tempObj);
+        }
       });
     }
   },
