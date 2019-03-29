@@ -15,12 +15,13 @@
     <p
       :class="[this.badSearch ? 'badSearch' : 'goodSearch']"
     >Search must be longer than 3 characters</p>
-    <p v-if="emptyListings  && !badSearch">Sorry, there were no results for {{lastSearch}}</p>
-    <p v-if="!emptyListings && lastSearch">Search results for: {{lastSearch}}</p>
+    <p v-if="emptyListings  && !badSearch">Sorry, there were no results for {{searchDetail}}</p>
+    <p v-if="!emptyListings && (searchDetail)">Search results for: {{searchDetail}}</p>
   </div>
 </template>
 
 <script>
+import _ from "lodash";
 import BasicButton from "../Button/BasicButton";
 
 export default {
@@ -33,7 +34,8 @@ export default {
     return {
       searchTerm: "",
       badSearch: false,
-      lastSearch: ""
+      lastSearch: "",
+      searchDetail: ""
     };
   },
   methods: {
@@ -53,13 +55,14 @@ export default {
       } else {
         this.badSearch = true;
       }
+      this.searchDetail = this.lastSearch || this.searchTerm;
     },
-    onChange() {
+    onChange: _.debounce(function() {
       this.lastSearch = "";
       if (this.searchTerm.length > 2) {
         this.searchStock();
       }
-    }
+    }, 500)
   }
 };
 </script>

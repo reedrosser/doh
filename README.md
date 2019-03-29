@@ -20,7 +20,7 @@ npm i
 
 ## Configuration
 
-The Express server needs access to stock data csv files in order to provide them to D'oh. Update the config.js file with the paths to your stock data files in .csv format.
+The Express server needs access to stock data csv files in order to provide them to D'oh. Copy your stock data files in to the /src/assets/CSVs directoy in .csv format.
 
 ## Deployment
 
