@@ -13,7 +13,7 @@ git clone git@github.com:reedrosser/doh.git
 Then use your favorite package manager to install the dependencies
 
 ```bash
-yarn i
+yarn install
 or
 npm i
 ```
