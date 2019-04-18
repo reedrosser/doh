@@ -120,7 +120,14 @@ export default {
   },
   created() {
     this.series[0].name = `${this.stockSymbol}`;
-    getHistory(this.stockSymbol, this.setDataPoints);
+    console.log("bout to get history");
+    getHistory(this.stockSymbol)
+      .then(res => {
+        this.setDataPoints(res.data);
+      })
+      .catch(err => {
+        console.error(`couldn't set the data points: ${err}`);
+      });
   }
 };
 </script>
