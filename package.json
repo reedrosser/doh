@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "apexcharts": "^3.6.3",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "csvtojson": "^2.0.10",
     "express": "^4.17.1",
     "fs": "^0.0.1-security",
